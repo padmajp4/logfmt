@@ -14,6 +14,7 @@ export function logfmt(obj: LogObject): string {
   return Object.entries(obj)
     .filter(([, v]) => v !== undefined)
     .map(([k, v]) => {
+      if (/[\s="]/.test(k)) throw new Error(`logfmt: invalid key "${k}" — keys must not contain spaces, = or "`)
       const serialized = serializeValue(v)
       return serialized === '' ? k : `${k}=${serialized}`
     })
@@ -21,6 +22,7 @@ export function logfmt(obj: LogObject): string {
 }
 
 export function parseLogfmt(line: string): LogObject {
+  if (line.length > 10_000) throw new RangeError('parseLogfmt: input exceeds 10,000 characters')
   const result: LogObject = {}
   const re = /(\w+)=("(?:[^"\\]|\\.)*"|[^\s]*)/g
 

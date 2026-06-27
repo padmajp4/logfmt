@@ -67,6 +67,8 @@ Parses a logfmt string back into an object. All values are returned as strings.
 - `logfmt` and `parseLogfmt` are round-trip compatible — parsing a serialized string returns the original values (as strings).
 - Keys with `undefined` values are omitted from output.
 - Keys with `null` values are rendered as bare keys (no `=value`).
+- Keys must not contain spaces, `=`, or `"` — `logfmt` throws if they do.
+- `parseLogfmt` rejects inputs longer than 10,000 characters with a `RangeError`.
 
 ## License
 
